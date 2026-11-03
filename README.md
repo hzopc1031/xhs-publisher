@@ -50,8 +50,9 @@ xhs profiles
 cp examples/profiles.example.json profiles.json
 ```
 
-> 说明：CDP 能直接认出 `Default` profile；其他 profile 只能通过「该 profile 已打开的创作平台标签页的昵称」来识别。
-> 所以使用非默认 profile 前，请确保它的窗口里开着任意一个 creator.xiaohongshu.com 页面（例如笔记管理）。
+> 说明：CDP 的默认 browserContext 不一定对应 `Default` 目录（取决于哪个 profile 窗口先打开），
+> 因此一律按已打开的创作平台标签页上的昵称识别账号。
+> 使用前请确保目标账号的窗口里开着任意一个 creator.xiaohongshu.com 页面（例如笔记管理）。
 
 ## 用法
 
@@ -161,7 +162,7 @@ state/        运行时生成（已忽略，不要提交）
   - 笔记管理：`.note-card`，状态取卡片里的「审核中 / 未通过 …」文字
 - 拦截检测基于关键词（如「登录超限」「扫码登录」「安全验证」「滑块」）和 URL（`/login`、`captcha`），可能漏判或误判；
   若标题/正文本身包含这些词，可能误报。
-- 非默认 profile 无法通过 CDP 直接从目录名定位，需要该 profile 已开着创作平台页面并按昵称识别；
+- 任何 profile 都无法通过 CDP 直接从目录名定位（默认 browserContext 也不一定是 `Default`），需要该 profile 已开着创作平台页面并按昵称识别；
   Chrome 不允许在非默认 profile 里通过 CDP 新建标签页时，会复用该 profile 中**不在编辑**的创作平台标签页。
 - 旧标签页里的昵称可能是改名前的（页面没刷新），fill 会重新加载发布页后再核对，以新页面为准。
 - 图片顺序按命令行/JSON 顺序一次性上传，未单独验证上传后的顺序。
