@@ -1,0 +1,5 @@
+{
+  "_comment": "复制为项目根目录 profiles.json（已被 .gitignore 忽略）。key 是 Chrome 个人资料名（chrome://settings 里看到的名字）或目录名（Default / Profile 1）。",
+  "Default": { "nickname": "示例昵称A" },
+  "账号B": { "nickname": "示例昵称B" }
+}

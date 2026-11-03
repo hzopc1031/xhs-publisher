@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+build/
+dist/
+
+# 运行时状态 / 截图 / 本地配置（可能含账号信息，不要提交）
+state/
+.xhs-state/
+screenshots/
+*.png
+*.jpg
+*.jpeg
+*.webp
+profiles.json
+drafts/
+!examples/*.json
+
+# 浏览器数据：绝不提交 cookies / 登录态
+chrome-profile/
+user-data/
+*cookies*
+*Cookies*
+*.sqlite
+Local State

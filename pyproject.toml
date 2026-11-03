@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "xhs-publisher"
+version = "0.1.0"
+description = "通过 CDP 连接已登录的 Chrome，在小红书创作服务平台填写图文笔记（填写与发布分离）"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+dependencies = ["playwright>=1.40"]
+
+[project.scripts]
+xhs = "xhs_publisher.cli:main"
+
+[tool.setuptools]
+packages = ["xhs_publisher"]
