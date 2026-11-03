@@ -41,14 +41,15 @@ def expected_nickname(args, profile_dir: str, profile_name: str) -> str:
 # ---------------------------------------------------------------- 选 profile 对应的 browserContext
 def select_context(browser, profile_dir: str, expect_nick: str):
     """返回 (context_id, is_default)。
-    Default 目录 = CDP 的 defaultBrowserContextId；其他 profile 无法直接从 CDP 拿到目录名，
-    因此在非默认 context 中查找已打开的 creator.xiaohongshu.com 标签页，以页面昵称匹配。"""
+    CDP 的默认 browserContext 不一定对应 Default 目录（取决于哪个 profile 窗口先打开），
+    因此遍历每个 context 中已打开的 creator.xiaohongshu.com 标签页，按页面昵称匹配。
+    is_default 表示命中的 context 是否为 defaultBrowserContextId。"""
+    # 注意：CDP 的默认 browserContext 不一定对应 Default 目录（取决于哪个 profile 窗口先打开），
+    # 所以一律按页面昵称匹配，不按 context 是否默认来推断账号。
     default_id = B.default_context_id(browser)
-    if profile_dir == "Default":
-        return default_id, True
     seen = {}
     for page, _tid, ctx in B.pages_with_ctx(browser):
-        if ctx == default_id or X.CREATOR_HOST not in page.url:
+        if X.CREATOR_HOST not in page.url:
             continue
         try:
             nick = page.locator(X.SEL_NICKNAME).first.inner_text(timeout=3000).strip()
@@ -56,10 +57,10 @@ def select_context(browser, profile_dir: str, expect_nick: str):
             nick = "?"
         seen.setdefault(ctx, set()).add(nick)
         if nick == expect_nick:
-            return ctx, False
+            return ctx, ctx == default_id
     detail = "; ".join(f"{c[:8]}: {sorted(n)}" for c, n in seen.items()) or "无"
     raise X.XhsError(
-        f"在非默认 profile 中找不到昵称为「{expect_nick}」的小红书创作平台标签页（已发现: {detail}）。\n"
+        f"按页面昵称在所有 profile 中找不到「{expect_nick}」的小红书创作平台标签页（已发现: {detail}）。\n"
         f"CDP 无法把 profile 目录 {profile_dir!r} 直接映射到标签页，请先在该 profile 的 Chrome 窗口里"
         f"打开/刷新 {X.NOTE_MANAGER_URL}，再重试。")
 
